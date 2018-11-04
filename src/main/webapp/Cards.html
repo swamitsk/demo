@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cards</title>
+    <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
+    <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-resource.js"></script>
+    <script type="text/javascript" src="app/general.controller.js"></script>
+
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body ng-init="getAllCards()" ng-app="app" ng-controller="GeneralController">
+
+<div class="panel panel-default">
+    <div class="panel-heading">Cards</div>
+    <div class="panel-body">
+        <div class="col-md-4">
+            <form >
+                <div class="form-group">
+                    <label for="cardHolderName">Card Holder Name</label> <input
+                        type="text" ng-model="card.cardHolderName" class="form-control"
+                        id="cardHolderName" placeholder="Card Holder Name">
+                </div>
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="number" ng-model="card.cardNumber"
+                           class="form-control" id="cardNumber"
+                           placeholder="Card number">
+                </div>
+
+                <button type="submit" data-ng-click="saveCard()" class="btn btn-default">Submit</button>
+                <button type="submit" data-ng-click="updateCard()" class="btn btn-default">Update</button>
+
+            </form>
+
+        </div>
+
+        <div class="table-responsive col-md-6">
+            <table class="table table-striped">
+                <tr>
+                    <th>Card Number</th>
+                    <th>Card Type</th>
+                    <th>Card Sub Type</th>
+                    <th>Card Holder Name</th>
+
+                    <th></th>
+                </tr>
+                <tr data-ng-repeat="card in cards" data-ng-click="BindSelectedData(card)">
+                    <td>{{card.cardNumber}}</td>
+                    <td>{{card.cardType}}</td>
+                    <td>{{card.cardSubType}}</td>
+                    <td>{{card.cardHolderName}}</td>
+                    <td>
+                        <button type="button" class="btn btn-default"
+                                ng-click="deleteCard(card.cardId)">
+								<span class="glyphicon glyphicon-remove-circle"
+                                      aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
