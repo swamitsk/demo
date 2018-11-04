@@ -6,7 +6,7 @@ import java.io.Serializable;
 @Entity
 public class Card implements Serializable{
 
-    private static final long serialVersionUID = 0x62A6DA99AABDA8A8L;
+    private static final long serialVersionUID = 0x45A6DA99BBBDA8A8L;
 	
 	@Column
 	@GeneratedValue(strategy = GenerationType.AUTO)
