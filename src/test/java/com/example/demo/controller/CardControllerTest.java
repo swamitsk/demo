@@ -13,9 +13,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 public class CardControllerTest {
-    @Test
-    public void getAllCards() throws Exception {
-    }
 
     @Test
     public void basicGetTest() {
@@ -26,13 +23,13 @@ public class CardControllerTest {
     @Test
     public void invalidGetCard() {
         given().when().get("/cards/999")
-                .then().statusCode(404);
+                .then().statusCode(400);
     }
 
     @Test
     public void getCard() throws Exception {
         given().when().get("/cards/999")
-                .then().statusCode(404);
+                .then().statusCode(400);
     }
 
     @Test
@@ -72,8 +69,8 @@ public class CardControllerTest {
     @Test
     public void updateCard() throws Exception {
         Card card = new Card();
-        card.setCardHolderName("xyx1111");
-        card.setCardNumber(667876969699878L);
+        card.setCardHolderName("xyx1112");
+        card.setCardNumber(667876969697879L);
         Response response =with().body(card).accept(ContentType.JSON).contentType(ContentType.JSON).post("/cards");
         String responseString = response.getBody().asString();
         Assert.assertTrue(responseString.contains("cardId"));
@@ -83,17 +80,29 @@ public class CardControllerTest {
 
         card = new Card();
         card.setCardHolderName("xyx1111");
-        card.setCardNumber(444433333444L);
+        card.setCardNumber(4444333334445L);
 
         with().body(card).accept(ContentType.JSON).contentType(ContentType.JSON).when().put("/cards/"+cardId.get(cardId.size()-1)).then().statusCode(200);
     }
 
     @Test
     public void deleteCard() throws Exception {
+
+
         given().when().delete("/cards/999")
-                .then().statusCode(404);
-        saveCard();
-        given().when().delete("/cards/1").then().statusCode(200);
+                .then().statusCode(400);
+
+        Card card = new Card();
+        card.setCardHolderName("xyx1112");
+        card.setCardNumber(667876969697879L);
+        Response response =with().body(card).accept(ContentType.JSON).contentType(ContentType.JSON).post("/cards");
+
+        com.jayway.restassured.path.json.JsonPath jsonPathEvaluator = response.jsonPath();
+        ArrayList cardId = jsonPathEvaluator.get("cardId");
+
+
+
+        given().when().delete("/cards/"+cardId.get(cardId.size()-1)).then().statusCode(200);
     }
 
 }

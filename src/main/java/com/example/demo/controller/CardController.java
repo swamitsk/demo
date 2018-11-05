@@ -24,7 +24,7 @@ public class CardController {
         Optional<Card> card = cardRepository.findById(cardId);
 
         if (!card.isPresent()) {
-            throw new CardNotFoundException("id-" + cardId);
+            throw new CardException("id-" + cardId);
         }
 
 	    return card.get();
@@ -45,14 +45,14 @@ public class CardController {
            cardTypeObj = Enums.getIfPresent(CardType.class,cardType.get()).orNull();
 
            if (cardTypeObj == null) {
-               throw new CardNotFoundException("Card Type-" + cardType);
+               throw new CardException("Card Type-" + cardType);
            }
 
        } if (cardSubType.isPresent()) {
            cardSubTypeObj = Enums.getIfPresent(CardSubType.class, cardSubType.get()).orNull();
 
            if (cardSubTypeObj == null) {
-               throw new CardNotFoundException("Card Sub Type-" + cardSubType);
+               throw new CardException("Card Sub Type-" + cardSubType);
            }
        }
 
@@ -70,6 +70,11 @@ public class CardController {
 	@PostMapping(path="/cards", consumes = "application/json", produces = "application/json")
 	public List<Card> saveCard(@RequestBody Card card) {
 
+	    if (card.getCardNumber() == null || card.getCardHolderName() == null) {
+            throw new CardException(" invalid parameter");
+        } if (cardRepository.findByCardNumber(card.getCardNumber()).isPresent()) {
+	        throw new CardException("Card already Present");
+        }
 	    setCardTypeAndSubtype(card);
 		cardRepository.save(card);
 		return cardRepository.findAll();
@@ -116,6 +121,11 @@ public class CardController {
     @PutMapping("/cards/{cardId}")
     public List<Card> updateCard(@PathVariable Long cardId, @RequestBody Card card) {
 
+        if (card.getCardNumber() == null || card.getCardHolderName() == null) {
+            throw new CardException(" invalid parameter");
+        } if (cardRepository.findByCardNumber(card.getCardNumber()).isPresent()) {
+            throw new CardException("Card already Present");
+        }
         setCardTypeAndSubtype(card);
         card.setCardId(cardId);
         cardRepository.save(card);
@@ -128,7 +138,7 @@ public class CardController {
         Optional<Card> card = cardRepository.findById(cardId);
 
         if (!card.isPresent()) {
-            throw new CardNotFoundException("id-" + cardId);
+            throw new CardException("id-" + cardId);
         }
         cardRepository.deleteById(cardId);
         return cardRepository.findAll();
